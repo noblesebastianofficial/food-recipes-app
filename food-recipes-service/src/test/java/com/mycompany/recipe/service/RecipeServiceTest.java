@@ -109,7 +109,7 @@ class RecipeServiceTest extends BaseUnitTest {
         RecipeDto recipeResponseDto = createRecipeDto();
         //when
         recipeResponseDto.setCookingInstructions("marinated hot beef");
-        RecipeDto updateRecipeResponseDto = recipeService.createRecipe(recipeResponseDto);
+        RecipeDto updateRecipeResponseDto = recipeService.updateRecipe(recipeResponseDto);
 
         //return
         assertThat(updateRecipeResponseDto)

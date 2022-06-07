@@ -1,4 +1,4 @@
-# Loan Dashboard
+# User Authentication
 
 ## Description
 This micro service is responsible for User authentication
