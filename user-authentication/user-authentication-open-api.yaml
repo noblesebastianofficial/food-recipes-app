@@ -1,0 +1,328 @@
+openapi: 3.0.1
+info:
+  title: Auth/User API
+  description: Backend API For the Auth/User Service
+  version: 1.0.1.0
+servers:
+  - url: http://localhost:8761/
+tags:
+  - name: auth-controller
+    description: Auth Controller
+  - name: user-controller
+    description: User Controller
+security:
+  - bearerAuth: []
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - auth-controller
+      summary: Logs the user in to the system and return the auth tokens
+      operationId: authenticateUserUsingPOST
+      requestBody:
+        description: The LoginRequest payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEntity'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+  /api/auth/register:
+    post:
+      tags:
+        - auth-controller
+      summary: Registers the user and publishes an event to generate the email verification
+      operationId: registerUserUsingPOST
+      requestBody:
+        description: The RegistrationRequest payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEntityRegistration'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+  /api/user/logout:
+    post:
+      tags:
+        - user-controller
+      security:
+        - bearerAuth: []
+      summary: Logs the specified user device and clears the refresh tokens associated with it
+      operationId: logoutUserUsingPOST
+      requestBody:
+        description: The LogOutRequest payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Logoutrequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEntityRegistration'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    DeviceInfo:
+      title: DeviceInfo
+      required:
+        - deviceId
+        - deviceType
+      type: object
+      properties:
+        deviceId:
+          type: string
+          properties: {}
+          description: Device Id
+        deviceType:
+          type: string
+          properties: {}
+          description: Device type Android/iOS
+        notificationToken:
+          type: string
+          properties: {}
+          description: Device notification id
+    LoginRequest:
+      title: Login Request
+      required:
+        - deviceInfo
+        - email
+        - password
+      type: object
+      properties:
+        deviceInfo:
+          $ref: '#/components/schemas/DeviceInfo'
+        email:
+          type: string
+          description: User registered email
+          enum:
+            - NonEmpty String
+        password:
+          type: string
+          description: Valid user password
+          enum:
+            - NonEmpty String
+        username:
+          type: string
+          description: Registered username
+          enum:
+            - NonEmpty String
+      description: The login request payload
+    Logoutrequest:
+      title: Logout request
+      required:
+        - deviceInfo
+      type: object
+      properties:
+        deviceInfo:
+          $ref: '#/components/schemas/DeviceInfo'
+      description: The logout request payload
+    RegistrationRequest:
+      title: Registration Request
+      required:
+        - email
+        - password
+        - registerAsAdmin
+      type: object
+      properties:
+        email:
+          type: string
+          description: A valid email
+          enum:
+            - NonEmpty String
+        password:
+          type: string
+          description: A valid password string
+          enum:
+            - NonEmpty String
+        registerAsAdmin:
+          type: object
+          properties: {}
+          description: Flag denoting whether the user is an admin or not
+        username:
+          type: string
+          description: A valid username
+          enum:
+            - NonEmpty String
+      description: The registration request payload
+    ResponseEntity:
+      title: ResponseEntity
+      type: object
+      properties:
+        token:
+          type: string
+          description: Valid token
+          enum:
+            - NonEmpty String
+        refreshToken:
+          type: string
+          description: Valid refreshToken
+          enum:
+            - NonEmpty String
+        tokenType:
+          type: string
+          description: Valid tokenType
+          enum:
+            - NonEmpty String
+        expiryDuration:
+          type: integer
+          description: Valid expiryDuration
+          format: int64
+        id:
+          type: integer
+          description: Valid id
+          format: int64
+        username:
+          type: string
+          description: Registered username
+          enum:
+            - NonEmpty String
+        email:
+          type: string
+          description: User registered email
+          enum:
+            - NonEmpty String
+    ResponseEntityRegistration:
+      title: ResponseEntityRegistration
+      type: object
+      properties:
+        message:
+          type: string
+          description: Valid message
+          enum:
+            - NonEmpty String
+        success:
+          type: boolean
+          description: success code
+          format: boolean
+        timestamp:
+          type: string
+          description: timestamp
+          enum:
+            - NonEmpty String
+    InternalServerError:
+      description: Error Objects may differ depending on the underlying services or issues encountered
+      type: object
+      example:
+        message: Varying Error messages
+    Unauthorized401Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnauthorizedError'
+    UnauthorizedError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 401 UNAUTHORIZED
+        message:
+          type: string
+          example: Client tried to operate on a protected resource without providing the proper authorization.
+    Forbidden403Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForbiddenError'
+    ForbiddenError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 403 FORBIDDEN
+        message:
+          type: string
+          example: The user does not have the necessary permissions for the resource
+    Error500Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternalServerError'

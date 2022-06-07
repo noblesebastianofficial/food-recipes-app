@@ -1,0 +1,333 @@
+openapi: 3.0.1
+info:
+  title: Recipes Api
+  description: API for Recipes Application
+  version: 1.0.1.0
+servers:
+  - url: http://host:9091/
+tags:
+  - name: Food Recipe API
+    description: API information for Food Recipe APP
+paths:
+  /api/recipes:
+    get:
+      tags:
+        - Food Recipe API
+      summary: Retrieves all recipes
+      operationId: getAllRecipesUsingGET
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound404Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+    put:
+      tags:
+        - Food Recipe API
+      summary: Updates the given recipe
+      operationId: updateRecipeUsingPUT
+      requestBody:
+        description: recipeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDto'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound404Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+      x-codegen-request-body-name: recipeDto
+    post:
+      tags:
+        - Food Recipe API
+      summary: Create new recipe
+      operationId: createRecipeUsingPOST
+      requestBody:
+        description: recipeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDto'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound404Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+      x-codegen-request-body-name: recipeDto
+  /api/recipes/{id}:
+    get:
+      tags:
+        - Food Recipe API
+      summary: Retrieves recipe by given recipe id
+      operationId: getRecipeUsingGET
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound404Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+    delete:
+      tags:
+        - Food Recipe API
+      summary: Deletes the given recipe
+      operationId: deleteRecipeUsingDELETE
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '204':
+          description: No Content
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403Response'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500Response'
+components:
+  schemas:
+    IngredientDto:
+      title: IngredientDto
+      required:
+        - description
+      type: object
+      properties:
+        amount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        description:
+          type: string
+    RecipeDto:
+      title: RecipeDto
+      required:
+        - cookingInstructions
+        - isVeg
+        - name
+        - servings
+      type: object
+      properties:
+        cookingInstructions:
+          type: string
+        createdDate:
+          type: string
+          example: dd-MM-yyyy HH:mm
+        id:
+          type: integer
+          format: int64
+        ingredients:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientDto'
+        isVeg:
+          type: boolean
+        name:
+          type: string
+        servings:
+          type: string
+    InternalServerError:
+      description: Error Objects may differ depending on the underlying services or issues encountered
+      type: object
+      example:
+        message: Varying Error messages
+    NotFound404Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotFoundError'
+    NotFoundError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 404 NOT_FOUND
+        message:
+          type: string
+          example: The object you're trying to find doesn't seem to exist.
+    Unauthorized401Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnauthorizedError'
+    UnauthorizedError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 401 UNAUTHORIZED
+        message:
+          type: string
+          example: Client tried to operate on a protected resource without providing the proper authorization.
+    Forbidden403Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForbiddenError'
+    ForbiddenError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 403 FORBIDDEN
+        message:
+          type: string
+          example: The user does not have the necessary permissions for the resource
+    Error500Response:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternalServerError'

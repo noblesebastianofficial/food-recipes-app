@@ -1,0 +1,65 @@
+app:
+  jwtheader: Authorization
+  jwtheaderprefix: Bearer
+  jwtsecret: mySecret
+  jwtexpiration: 900000
+  tokenemailverificationduration: 3600000
+  tokenpasswordresetduration: 3600000
+  tokenrefreshduration: 2592000000
+  velocitytemplateslocation: /templates/
+  cachelogoutTokenmaxSize: 1000
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  server:
+    maxThreadsForPeerReplication: 0
+    wait-time-in-ms-when-sync-empty: 0
+
+logging:
+  level:
+    root: info
+
+server:
+  port: 8761
+
+spring:
+  application:
+    name: user-authentication
+  datasource:
+    driverClassName: org.h2.Driver
+    password: ''
+    url: jdbc:h2:mem:mydb;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        validator:
+          apply_to_ddl: false
+    show-sql: true
+
+zuul:
+  prefix: /api
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+  routes:
+    middleware:
+      path: /food-recipes-service/**
+      url: http://localhost:9091/
+
+management:
+   endpoints:
+      web:
+         base-path: /user-authentication
+         exposure:
+            include: health

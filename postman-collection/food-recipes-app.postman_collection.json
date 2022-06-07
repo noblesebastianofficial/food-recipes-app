@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "ce7d017d-e9df-406a-a966-fba14fb2bcd4",
+		"name": "foo-recipes-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3976510"
+	},
+	"item": [
+		{
+			"name": "user-authentication",
+			"item": [
+				{
+					"name": "USER LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"nobleseba11\",\n    \"email\":\"noblesebastiank@gmail.com\",\n    \"password\":\"123456@Check\",\n    \"deviceInfo\":{\n        \"deviceId\":\"3\",\n        \"deviceType\":\"DEVICE_TYPE_DESKTOP\"\n\n    }\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth-url}}/api/auth/login",
+							"host": [
+								"{{auth-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"nobleseba11\",\n    \"email\":\"noblesebastiank@gmail.com\",\n    \"password\":\"123456@Check\",\n    \"registerAsAdmin\":true\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth-url}}/api/auth/register",
+							"host": [
+								"{{auth-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER LOGOUT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjU0NTI4NjU5LCJleHAiOjE2NTQ1Mjk1NTl9.IbdKx-mIC_Y18wbKF8QeMjDyBA7EnkxYd-9tk1ejIzScti16Z9SQ_AGekBDasUfjltMpKud41pVPVeJbIFg0OA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n    \"deviceInfo\":{\n        \"deviceId\":\"3\",\n        \"deviceType\":\"DEVICE_TYPE_DESKTOP\"\n\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth-url}}/api/user/logout",
+							"host": [
+								"{{auth-url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "food-recipes-service",
+			"item": [
+				{
+					"name": "GET RECIPES BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{recipe-url}}/api/recipes/1",
+							"host": [
+								"{{recipe-url}}"
+							],
+							"path": [
+								"api",
+								"recipes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL RECIPES",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{recipe-url}}/api/recipes",
+							"host": [
+								"{{recipe-url}}"
+							],
+							"path": [
+								"api",
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE RECIPES",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " { \n \t \"name\":\"recipe2\", \n\t \"isVeg\":false, \n\t \"servings\":\"2\",\n\t \"ingredients\":[{\n\t \t\"description\": \"Beef\",\n\t \t\"amount\":\"9.00\"\n\t }] ,\n\t \"cookingInstructions\":\"blah\",\n\t \"categories\":[{\n\t \t\"description\": \"Seasonal\"\n\t }]\n \t\n }"
+						},
+						"url": {
+							"raw": "{{recipe-url}}/api/recipes",
+							"host": [
+								"{{recipe-url}}"
+							],
+							"path": [
+								"api",
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE RECIPE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {  \n \t \"id\":1,\n \t \"name\":\"recipe2\", \n\t \"isVeg\":true, \n\t \"servings\":\"2\",\n\t \"ingredients\":[{\n\t \t\"description\": \"Beef\",\n\t \t\"amount\":\"9.00\"\n\t }] ,\n\t \"cookingInstructions\":\"blah\",\n\t \"categories\":[{\n\t \t\"description\": \"Seasonal\"\n\t }]\n \t\n }"
+						},
+						"url": {
+							"raw": "{{recipe-url}}/api/recipes",
+							"host": [
+								"{{recipe-url}}"
+							],
+							"path": [
+								"api",
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE RECIPE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{recipe-url}}/api/recipes/1",
+							"host": [
+								"{{recipe-url}}"
+							],
+							"path": [
+								"api",
+								"recipes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

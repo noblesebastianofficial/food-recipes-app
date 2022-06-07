@@ -1,0 +1,22 @@
+version: '3'
+services:
+  user-authentication:
+    build: ./user-authentication
+    container_name: user-authentication
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8761:8761"
+  food-recipes-service:
+    build: ./food-recipes-service
+    container_name: food-recipes-service
+    restart: on-failure
+    ports:
+      - "9091:9091"
+    links:
+      - user-authentication
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://user-authentication:8761/eureka
+
+
