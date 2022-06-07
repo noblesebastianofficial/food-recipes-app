@@ -23,7 +23,7 @@ Then the jwt token will be  supplied by the api, this token is used in recipes A
 * [jUnit](https://junit.org/)
 * [mockito](https://site.mockito.org/)
 * [Docker](https://www.docker.com/)
-* [Docker](https://www.docker.com/)
+
 
 
 ## Steps to build
