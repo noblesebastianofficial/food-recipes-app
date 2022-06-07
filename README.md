@@ -4,6 +4,7 @@
 Micro Services to display the Food Recipes APP. This service is having two micro services
 * user-authentication
 * food-recipes-service
+
 User authentication API allows users to register new user, login user and logout
 
 Food recipes service API allows users to manage your favourite recipes.
